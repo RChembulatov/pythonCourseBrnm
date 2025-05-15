@@ -50,9 +50,9 @@ student_courses_data = [
     (4, 2)
 ]
 
-students = Students.insert_many(students_data).execute()
-courses = Courses.insert_many(courses_data).execute()
-student_courses = StudentCourses.insert_many(student_courses_data).execute()
+# students = Students.insert_many(students_data).execute()
+# courses = Courses.insert_many(courses_data).execute()
+# student_courses = StudentCourses.insert_many(student_courses_data).execute()
 
 
 def get_students_by_age(age):
@@ -87,15 +87,26 @@ def get_students_by_course_and_city(course, city):
     return result
 
 
-print("Студенты старше 30 лет: ", get_students_by_age(30))
+# Функция добавления студента на курс
+def add_student_to_course(student_id, course_id):
+    StudentCourses.create(student_id=student_id, course_id=course_id)
+
+
+# Функция удаления студента и его записей о курсах
+def delete_student(student_id):
+    StudentCourses.delete().where(StudentCourses.student_id == student_id).execute()
+    Students.get_by_id(student_id).delete_instance()
+
+
+# print("Студенты старше 30 лет: ", get_students_by_age(30))
 # ['Andy Wings', 'Kate Brooks']
 
-print("Студенты, которые проходят курс по python: ",
-      get_students_by_course('python'))
+# print("Студенты, которые проходят курс по python: ",
+    #   get_students_by_course('python'))
 # ['Max Brooks', 'John Stones', 'Andy Wings']
 
-print("Студенты, которые проходят курс по python и из Spb: ",
-      get_students_by_course_and_city('python', 'Spb'))
+# print("Студенты, которые проходят курс по python и из Spb: ",
+    #   get_students_by_course_and_city('python', 'Spb'))
 # ['Max Brooks', 'John Stones']
 
 database.close()
